@@ -1,0 +1,72 @@
+//模式字符串匹配算法,找到模式字符串第一次出现在目字符串中的位置
+
+#include<iostream>
+#include<string>
+#include<string.h>
+#include<stdio.h>
+#include<vector>
+using namespace std;
+
+//计算next数组
+//参数说明：pattern为模式字符串；
+//			    len为模式字符串的长度；
+//			    next数组中next[j] = k 表示如果模式字符串中第j个字符与源串S中第i个字符不匹配时，pattern中下一个和S[i]匹配的字符的位置为k
+void get_next(const char pattern[], int len, int next[])
+{
+	if(pattern == NULL || len == 0)
+		return;
+	int j = 0;
+	next[j] = -1;
+	int k = -1;
+	while(j < (len - 1)){
+		if(k == -1 || pattern[j] == pattern[k]){
+			++j;
+			++k;
+			if(pattern[j] != pattern[k])           //确保P[next[i]] != P[i];否则还是不会匹配
+				next[j] = k;
+			else                                   //如果P[next[i]] != P[i],则跳到next[j]的位置进行匹配
+				next[j] = next[k];
+		}
+		else{
+			k = next[k];
+		}
+	}
+}
+
+//KMP算法
+int kmp_search(const char src[], int len1, const char pat[], int len2, int next[], int pos)
+{
+	if(src == NULL || pat == NULL)
+		return -1;
+
+	//计算next数组
+	get_next(pat, len2, next);
+
+	//从主串的第pos个位置开始比较
+	int i = pos;                           
+	int j = 0;
+	while(i < len1 && j < len2){
+		if(j == -1 || src[i] == pat[j]){
+			++i;
+			++j;
+		}//j == -1的时候即src字符串中的位置i要下移一个位置,与模式串中的第一个字符来比较
+		else{
+			j = next[j];
+		}
+	}
+	if(j >= len2)
+		return i - len2;
+	else
+		return -1;
+}
+int main()
+{
+	char src[] = {"abacababc"};
+	char pat[] = {"abab"};
+	const int N = 100;
+	int next[N] = {0};
+	int index = kmp_search(src, strlen(src), pat, strlen(pat), next, 0);
+	cout<<index<<endl;
+
+	return 0;
+}
