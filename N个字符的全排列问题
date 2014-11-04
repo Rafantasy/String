@@ -1,0 +1,44 @@
+#include<iostream>
+#include<string>
+#include<string.h>
+#include<stdio.h>
+using namespace std;
+void swap(char &a, char &b)
+{
+	char temp = a;
+	a = b;
+	b = temp;
+}
+void output(char d[], int n)
+{
+	for(int i = 0; i < n; ++i)
+		cout<<d[i];
+	cout<<" ";
+}
+//得到d[]中下标从j开始的n个字符的全排列
+void perm(char d[], int n, int j)
+{
+	if(j == n)
+		output(d, n);
+	else{
+		for(int i = j; i < n;  ++i){
+			if(i != j)
+				swap(d[j], d[i]);    //交换
+			perm(d, n, j+1);       //递归
+			if(i != j)
+				swap(d[j], d[i]);    //恢复成原始排列,作为参照;否则会有重复的排列出现
+		}
+	}
+}
+int main()
+{
+	char a[] = {'a','b','c','d','e','f','g','h','i','j','k','l',
+        'm','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+    int n;
+    cout<<"请输入n:\n";
+    cin>>n;
+    perm(a,n,0);
+    cout<<endl;
+
+	return 0;
+}
