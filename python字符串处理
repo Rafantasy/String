@@ -1,0 +1,24 @@
+import csv,codecs
+
+# f = io.open("5675b17efe1a1fc06329086f1541f08b.csv", mode="r", encoding="utf-8")
+
+lines = open('5675b17efe1a1fc06329086f1541f08b.csv','r').readlines()
+
+data = lines[1:10]
+
+# with open('results.csv','wb') as f:
+#     f.write(u'\ufeff'.encode('utf8'))
+#     w = csv.writer(f)
+#     for row in data:
+#         w.writerow([item.encode('utf8') for item in row])
+rs = codecs.open('temp.csv', 'w', 'utf_8_sig')
+with codecs.open('5675b17efe1a1fc06329086f1541f08b.csv','r','gb2312') as csvfile:
+    # for line in csvfile:
+    #     print line
+    for line in csvfile:
+        rs.write(line+'\n')
+
+# f = codecs.open('temp.csv', 'w', 'utf_8_sig')
+# writer = csv.writer(f)
+# writer.writerow(data)
+# f.close()
